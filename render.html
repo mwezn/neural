@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rendering pixels from CSV</title>
+</head>
+<body>
+<canvas id="canvas" width="56" height="56" style="border:1px solid black"></canvas>
+<button onclick="getData()">Fetch numbers</button>
+<table id="displaydata" style="width:100%"></table>
+<script type="text/javascript">
+
+    const canvas = document.getElementById("canvas");
+    const table=document.getElementById("displaydata")
+    canvas.style.backgroundColor = "black";
+    const ctx = canvas.getContext("2d");
+    let wanted;
+    ctx.fillStyle = "white";
+
+ const tableRow= (data)=>`<tr>${data}</tr>`
+ const innerTable= (data)=>`<td>${data}</td>`
+ let result;
+ let arr;
+ //let i=28;
+ let j=0;
+ let inner=``
+ let row;
+
+    async function getData(){
+        await fetch('http://localhost:3000/data')
+          .then(d=>{
+            return d.text()
+          })
+          .then(res=>{
+            result=res.replace('[','').replace(']','')
+            arr=result.split(",").map(d=>Number(d))
+            arr.forEach((d,i)=>{
+
+              
+                if(d==0){
+                    if(i%28==0){
+                      row=table.insertRow()
+                    }
+                   ctx.fillRect(2*(i%28),2*Math.floor(i/28),2,2)
+                  
+
+                }
+                
+                
+                
+               
+                let cell = row.insertCell();
+                cell.textContent = d;
+              
+            
+
+                
+            }
+            
+            
+            )
+
+            /*while(i<785){
+
+                
+                inner+=innerTable(arr.slice(i-28,i)[j])
+                console.log(inner)
+                i+=28;
+            
+                
+                cell.textContent = "New Cell!";
+                
+                */
+
+
+            
+            
+          })
+          
+    }
+      
+    
+</script>
+</body>
+</html>
